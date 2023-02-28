@@ -1,7 +1,7 @@
 const Sort = () => {
   return (
-    <div class="sort">
-      <div class="sort__label">
+    <div className="sort">
+      <div className="sort__label">
         <svg
           width="10"
           height="6"
@@ -16,9 +16,9 @@ const Sort = () => {
         <b>Sort by:</b>
         <span>popular</span>
       </div>
-      <div class="sort__popup">
+      <div className="sort__popup">
         <ul>
-          <li class="active">popular</li>
+          <li className="active">popular</li>
           <li>price</li>
           <li>alphabet</li>
         </ul>
