@@ -3,6 +3,10 @@ import React from 'react';
 const PizzaBlock = ({ title, price }) => {
   const [pizzaCount, setPizzaCount] = React.useState(0);
 
+  // const onClickAdd = () => {
+  //   setPizzaCount(pizzaCount + 1);
+  // }
+
   return (
     <div className="pizza-block">
       <img
