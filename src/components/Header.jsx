@@ -13,7 +13,7 @@ const Header = () => {
         </div>
         <div className="header__cart">
           <a href="/cart.html" className="button button--cart">
-            <span>89 $</span>
+            <span>590 UAH</span>
             <div className="button__delimiter"></div>
             <svg
               width="18"

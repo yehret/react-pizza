@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Categories from './components/Categories';
 import Sort from './components/Sort';
 import PizzaBlock from './components/PizzaBlock';
+import pizzas from './assets/pizzas.json';
 
 import React from 'react';
 
@@ -18,10 +19,9 @@ const App = () => {
           </div>
           <h2 className="content__title">All pizzas</h2>
           <div className="content__items">
-            <PizzaBlock price={14} title={'Cheeseburger-pizza'} />
-            <PizzaBlock price={18} title={'Mexican'} />
-            <PizzaBlock price={13} title={'Pepperoni'} />
-            <PizzaBlock price={22} title={'Cesar'} />
+            {pizzas.map((obj) => {
+              return <PizzaBlock key={obj.id} {...obj} />;
+            })}
           </div>
         </div>
       </div>
