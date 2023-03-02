@@ -7,6 +7,7 @@ import PizzaBlock from './components/PizzaBlock';
 import axios from 'axios';
 
 import React from 'react';
+import Skeleton from './components/PizzaBlock/Skeleton';
 
 const App = () => {
   const [items, setItems] = React.useState([]);
@@ -29,7 +30,7 @@ const App = () => {
           <h2 className="content__title">All pizzas</h2>
           <div className="content__items">
             {items.map((obj) => {
-              return <PizzaBlock key={obj.id} {...obj} />;
+              return <Skeleton key={obj.id} {...obj} />;
             })}
           </div>
         </div>
