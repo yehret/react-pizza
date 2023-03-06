@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId);
+  const sortType = useSelector((state) => state.filter.sort.sortProperty);
   const dispatch = useDispatch();
 
   const { searchValue } = React.useContext(SearchContext);
@@ -19,10 +20,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   // const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [sortType, setSortType] = React.useState({
-    name: 'popular',
-    sortProperty: 'rating',
-  });
 
   const onClickCategory = (id) => {
     dispatch(setCategoryId(id));
@@ -31,14 +28,15 @@ const Home = () => {
   React.useEffect(() => {
     setIsLoading(true);
 
-    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
-    const sortBy = sortType.sortProperty.replace('-', '');
+    const order = sortType.includes('-') ? 'asc' : 'desc';
+    const sortBy = sortType.replace('-', '');
     const category = categoryId > 0 ? `category=${categoryId}` : '';
-    const search = searchValue ? `&search=${searchValue}` : '';
+    const search = searchValue ? `search=${searchValue}` : '';
+    console.log(category);
 
     axios
       .get(
-        `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`,
+        `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
       )
       .then((res) => {
         setItems(res.data);
@@ -58,7 +56,7 @@ const Home = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onClickCategory={onClickCategory} />
-        <Sort value={sortType} onChangeSort={(i) => setSortType(i)} />
+        <Sort />
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
