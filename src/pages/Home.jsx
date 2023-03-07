@@ -1,34 +1,35 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
+
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
-import { SearchContext } from '../App';
 
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setFilters } from '../redux/slices/filterSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { sortList } from '../components/Sort';
 
 const Home = () => {
-  const { categoryId, sort } = useSelector((state) => state.filter);
+  const { categoryId, sort, searchValue } = useSelector((state) => state.filter);
   const sortType = sort.sortProperty;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isSearch = useRef(false);
+  const isMounted = useRef(false);
 
-  const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  // const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const onClickCategory = (id) => {
     dispatch(setCategoryId(id));
   };
 
-  React.useEffect(() => {
+  const fetchPizzas = () => {
     setIsLoading(true);
 
     const order = sortType.includes('-') ? 'asc' : 'desc';
@@ -44,22 +45,39 @@ const Home = () => {
         setItems(res.data);
         setIsLoading(false);
       });
-    window.scrollTo(0, 0);
-  }, [categoryId, sortType, searchValue, currentPage]);
+  };
 
   React.useEffect(() => {
-    const queryString = qs.stringify({
-      sortProperty: sort.sortProperty,
-      categoryId,
-      currentPage,
-    });
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
 
-    navigate(`?${queryString}`);
+      navigate(`?${queryString}`);
+    }
+    isMounted.current = true;
   }, [categoryId, currentPage, navigate, sort.sortProperty]);
 
-  // .filter((obj) => {
-  //   return obj.title.toLowerCase().includes(searchValue.toLowerCase());
-  // })
+  React.useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+
+      const sort = sortList.find((obj) => obj.sortProperty === params.sortProperty);
+
+      dispatch(setFilters({ ...params, sort }));
+    }
+    isSearch.current = true;
+  }, []);
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+    isSearch.current = false;
+  }, [categoryId, sortType, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
