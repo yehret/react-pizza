@@ -73,10 +73,8 @@ const Home = () => {
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
-    // if (!isSearch.current) {
+
     fetchPizzas();
-    // }
-    // isSearch.current = false;
   }, [categoryId, sortType, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
