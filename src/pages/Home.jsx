@@ -37,20 +37,29 @@ const Home = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `search=${searchValue}` : '';
 
-    // await axios
+    // axios
     //   .get(
     //     `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
     //   )
     //   .then((res) => {
     //     setItems(res.data);
     //     setIsLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     setIsLoading(false);
     //   });
 
-    const res = await axios.get(
-      `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
-    );
-    setItems(res.data);
-    setIsLoading(false);
+    try {
+      const res = await axios.get(
+        `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
+      );
+      setItems(res.data);
+    } catch (error) {
+      console.log('ERROR', error);
+    } finally {
+      setIsLoading(false);
+    }
+
     window.scrollTo(0, 0);
   };
 
