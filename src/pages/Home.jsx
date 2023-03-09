@@ -29,7 +29,7 @@ const Home = () => {
     dispatch(setCategoryId(id));
   };
 
-  const fetchPizzas = () => {
+  const fetchPizzas = async () => {
     setIsLoading(true);
 
     const order = sortType.includes('-') ? 'asc' : 'desc';
@@ -37,14 +37,21 @@ const Home = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `search=${searchValue}` : '';
 
-    axios
-      .get(
-        `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+    // await axios
+    //   .get(
+    //     `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
+    //   )
+    //   .then((res) => {
+    //     setItems(res.data);
+    //     setIsLoading(false);
+    //   });
+
+    const res = await axios.get(
+      `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
+    );
+    setItems(res.data);
+    setIsLoading(false);
+    window.scrollTo(0, 0);
   };
 
   React.useEffect(() => {
@@ -72,13 +79,11 @@ const Home = () => {
   }, []);
 
   React.useEffect(() => {
-    window.scrollTo(0, 0);
-
     fetchPizzas();
   }, [categoryId, sortType, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
-  const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
+  const skeletons = [...new Array(4)].map((_, index) => <Skeleton key={index} />);
 
   return (
     <div className="container">
