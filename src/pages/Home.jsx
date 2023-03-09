@@ -12,16 +12,17 @@ import Pagination from '../components/Pagination';
 import { setCategoryId, setFilters } from '../redux/slices/filterSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { sortList } from '../components/Sort';
+import { setPizzas } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
   const { categoryId, sort, searchValue } = useSelector((state) => state.filter);
+  const items = useSelector((state) => state.pizza.items);
   const sortType = sort.sortProperty;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -50,10 +51,10 @@ const Home = () => {
     //   });
 
     try {
-      const res = await axios.get(
+      const { data } = await axios.get(
         `https://63fcb034859df29986c23c24.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,
       );
-      setItems(res.data);
+      dispatch(setPizzas(data));
     } catch (error) {
       console.log('ERROR', error);
     } finally {
