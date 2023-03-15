@@ -1,5 +1,4 @@
 import './scss/app.scss';
-import React from 'react';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import NotFound from './pages/NotFound';
