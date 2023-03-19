@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { sortList } from '../components/Sort';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 
-const Home = () => {
+const Home: React.FC = () => {
   const { categoryId, sort, searchValue, currentPage } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
   const sortType = sort.sortProperty;
@@ -27,9 +27,13 @@ const Home = () => {
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const onClickCategory = (id) => {
+  const onClickCategory = (id: number) => {
     dispatch(setCategoryId(id));
   };
+
+  const onChangePage = (page: string) => {
+    dispatch(setCurrentPage(page))
+  }
 
   const getPizzas = async () => {
     const order = sortType.includes('-') ? 'asc' : 'desc';
@@ -38,6 +42,7 @@ const Home = () => {
     const search = searchValue ? `search=${searchValue}` : '';
 
     await dispatch(
+      // @ts-ignore  - temporarily
       fetchPizzas({
         sortBy,
         order,
@@ -90,7 +95,7 @@ const Home = () => {
     getPizzas();
   }, [categoryId, currentPage, navigate, sort.sortProperty, searchValue]);
 
-  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+  const pizzas = items.map((obj: any) => <PizzaBlock key={obj.id} {...obj} />);
   const skeletons = [...new Array(4)].map((_, index) => <Skeleton key={index} />);
 
   return (
@@ -111,7 +116,7 @@ const Home = () => {
 
       <Pagination
         currentPage={currentPage}
-        onChangePage={(number) => dispatch(setCurrentPage(number))}
+        onChangePage={onChangePage}
       />
     </div>
   );
