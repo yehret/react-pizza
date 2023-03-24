@@ -31,7 +31,7 @@ const Home: React.FC = () => {
     dispatch(setCategoryId(id));
   };
 
-  const onChangePage = (page: string) => {
+  const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page))
   }
 
