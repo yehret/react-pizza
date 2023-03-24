@@ -11,7 +11,7 @@ const Search: React.FC = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [value, setValue] = React.useState('');
 
-  const onClickClear = () => {
+  const onClickClear = (event: React.MouseEvent<SVGElement>) => {
     dispatch(setSearchValue(''));
     setValue('');
 
