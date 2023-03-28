@@ -8,11 +8,11 @@ type Sort = {
 interface FilterSliceState {
   searchValue: string;
   categoryId: number;
-  currentPage: 1;
+  currentPage: number
   sort: Sort;
 }
 
-const initialState = {
+const initialState: FilterSliceState = {
   searchValue: '',
   categoryId: 0,
   currentPage: 1,
