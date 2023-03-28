@@ -14,15 +14,16 @@ import {
   setFilters,
   setCurrentPage,
 } from '../redux/slices/filterSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { sortList } from '../components/Sort';
-import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { fetchPizzas, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { useAppDispatch } from '../redux/store';
 
 const Home: React.FC = () => {
   const { categoryId, sort, searchValue, currentPage } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
   const sortType = sort.sortProperty;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch()
   const navigate = useNavigate();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
@@ -48,7 +49,7 @@ const Home: React.FC = () => {
         order,
         category,
         search,
-        currentPage,
+        currentPage: String(currentPage),
       }),
     );
 
@@ -67,6 +68,7 @@ const Home: React.FC = () => {
     //   });
   };
 
+
   React.useEffect(() => {
     if (isMounted.current) {
       const queryString = qs.stringify({
@@ -82,11 +84,15 @@ const Home: React.FC = () => {
 
   React.useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
+      const params = qs.parse(window.location.search.substring(1)) as unknown as SearchPizzaParams;
+      const sort = sortList.find((obj) => obj.sortProperty === params.sortBy);
 
-      const sort = sortList.find((obj) => obj.sortProperty === params.sortProperty);
-
-      dispatch(setFilters({ ...params, sort }));
+      dispatch(setFilters({
+        searchValue: params.search,
+        categoryId: Number(params.category),
+        currentPage: Number(params.currentPage),
+        sort: sort || sortList[0],
+      }));
     }
     isSearch.current = true;
   }, []);
