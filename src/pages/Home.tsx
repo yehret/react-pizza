@@ -22,15 +22,18 @@ import { useAppDispatch } from '../redux/store';
 const Home: React.FC = () => {
   const { categoryId, sort, searchValue, currentPage } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
+
   const sortType = sort.sortProperty;
+
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
+  
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const onClickCategory = (id: number) => {
+  const onClickCategory = React.useCallback((id: number) => {
     dispatch(setCategoryId(id));
-  };
+  }, [])
 
   const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page))
