@@ -29,7 +29,6 @@ const SortPopUp: React.FC<SortPopUpProps> = React.memo(({ value }) => {
   const dispatch = useDispatch();
   // const sort = useSelector(selectSort);
   const sortRef = React.useRef<HTMLDivElement>(null);
-
   const [open, setOpen] = React.useState(false);
 
   const onClickListItem = (obj: SortItem) => {
