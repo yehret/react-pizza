@@ -9,15 +9,18 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
 
 import {
-  selectFilter,
   setCategoryId,
   setFilters,
   setCurrentPage,
-} from '../redux/slices/filterSlice';
+} from '../redux/filter/slice';
+
+import { selectFilter } from '../redux/filter/selectors';
 import { useSelector } from 'react-redux';
 import { sortList } from '../components/Sort';
-import { fetchPizzas, SearchPizzaParams, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { fetchPizzas } from '../redux/pizza/asyncActions';
 import { useAppDispatch } from '../redux/store';
+import { SearchPizzaParams } from '../redux/pizza/types';
+import { selectPizzaData } from '../redux/pizza/selectors';
 
 const Home: React.FC = () => {
   const { categoryId, sort, searchValue, currentPage } = useSelector(selectFilter);
