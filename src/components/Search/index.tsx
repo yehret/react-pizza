@@ -23,17 +23,23 @@ const Search: React.FC = () => {
 
     inputRef.current?.focus();
   };
+  
+  // const updateSearchValue = React.useCallback(
+  //   debounce((str: string) => {
+  //     dispatch(setSearchValue(str));
+  //   }, 250),
+  //   []
+  // );
 
-  const updateSearchValue = React.useCallback(
-    debounce((str: string) => {
+  const debouncedSearch = React.useMemo(
+    () => debounce((str: string) => {
       dispatch(setSearchValue(str));
-    }, 250),
-    [],
-  );
+    }, 250), [dispatch]
+  )
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
-    updateSearchValue(event.target.value);
+    debouncedSearch(event.target.value);
   };
 
   return (
